@@ -1,0 +1,5 @@
+This is a sample document for generating text embeddings.
+The Gemini API can process natural language to create vector representations.
+Embeddings are useful for tasks like semantic search, clustering, and classification.
+This text will be sent to the /corpus endpoint for processing.
+Machine learning models rely on high-quality input data for accurate results.

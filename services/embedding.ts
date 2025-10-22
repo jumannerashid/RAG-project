@@ -6,12 +6,12 @@ import { HfInference } from "https://esm.sh/@huggingface/inference@4.11.3/denone
 const localEnv = await load({
   export: true,
 });
-console.log('localEnv ', localEnv, Deno.env.get("HF_API_KEY"));
+console.log('localEnv ', localEnv, );
 
-const HF_API_KEY = localEnv.HF_API_KEY;
-const PINECONE_API_KEY = localEnv.PINECONE_API_KEY;
-const PINECONE_ENVIRONMENT = localEnv.PINECONE_ENVIRONMENT;
-const PINECONE_INDEX = localEnv.PINECONE_INDEX;
+const HF_API_KEY =Deno.env.get("HF_API_KEY");
+const PINECONE_API_KEY = Deno.env.get("PINECONE_API_KEY");
+const PINECONE_ENVIRONMENT = Deno.env.get("PINECONE_ENVIRONMENT");
+const PINECONE_INDEX = Deno.env.get("PINECONE_INDEX");
 
 if (!HF_API_KEY) throw new Error("HF_API_KEY is not set in environment variables");
 if (!PINECONE_API_KEY) throw new Error("PINECONE_API_KEY is not set in environment variables");

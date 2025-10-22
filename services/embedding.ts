@@ -1,11 +1,12 @@
 // services/embedding.ts
 import { load } from "jsr:@std/dotenv";
+
 import { HfInference } from "https://esm.sh/@huggingface/inference@4.11.3/denonext/inference.mjs";
 
 const localEnv = await load({
   export: true,
 });
-console.log('localEnv ', localEnv);
+console.log('localEnv ', localEnv, Deno.env.get("HF_API_KEY"));
 
 const HF_API_KEY = localEnv.HF_API_KEY;
 const PINECONE_API_KEY = localEnv.PINECONE_API_KEY;

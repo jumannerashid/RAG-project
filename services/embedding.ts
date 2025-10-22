@@ -3,9 +3,9 @@ import { load } from "jsr:@std/dotenv";
 import { HfInference } from "https://esm.sh/@huggingface/inference@4.11.3/denonext/inference.mjs";
 
 const localEnv = await load({
-  envPath: ".env",
   export: true,
 });
+console.log('localEnv ', localEnv);
 
 const HF_API_KEY = localEnv.HF_API_KEY;
 const PINECONE_API_KEY = localEnv.PINECONE_API_KEY;

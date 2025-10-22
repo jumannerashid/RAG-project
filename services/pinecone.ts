@@ -1,9 +1,9 @@
 import { load } from "https://deno.land/std@0.170.0/dotenv/mod.ts";
 
 const env = await load();
-const PINECONE_API_KEY = env.PINECONE_API_KEY;
-const PINECONE_HOST = env.PINECONE_HOST || "us-west1-gcp";
-const PINECONE_INDEX = env.PINECONE_INDEX || "jumanne";
+const PINECONE_API_KEY = Deno.env.get("PINECONE_API_KEY");
+const PINECONE_HOST = Deno.env.get("PINECONE_HOST") || "us-west1-gcp";
+const PINECONE_INDEX = Deno.env.get("PINECONE_INDEX") || "jumanne";
 
 if (!PINECONE_API_KEY || !PINECONE_HOST || !PINECONE_INDEX) {
   console.error("Missing Pinecone environment variables:");

@@ -1,12 +1,21 @@
 // services/embedding.ts
-import { load } from "https://deno.land/std@0.170.0/dotenv/mod.ts";
+import { load } from "jsr:@std/dotenv";
 import { HfInference } from "https://esm.sh/@huggingface/inference@4.11.3/denonext/inference.mjs";
 
-const env = await load();
-const HF_API_KEY = env.HF_API_KEY;
+const localEnv = await load({
+  envPath: ".env",
+  export: true,
+});
+
+const HF_API_KEY = localEnv.HF_API_KEY;
+const PINECONE_API_KEY = localEnv.PINECONE_API_KEY;
+const PINECONE_ENVIRONMENT = localEnv.PINECONE_ENVIRONMENT;
+const PINECONE_INDEX = localEnv.PINECONE_INDEX;
 
 if (!HF_API_KEY) throw new Error("HF_API_KEY is not set in environment variables");
-
+if (!PINECONE_API_KEY) throw new Error("PINECONE_API_KEY is not set in environment variables");
+if (!PINECONE_ENVIRONMENT) throw new Error("PINECONE_ENVIRONMENT is not set in environment variables");
+if (!PINECONE_INDEX) throw new Error("PINECONE_INDEX is not set in environment variables");
 const client = new HfInference(HF_API_KEY);
 
 export async function embedChunks(chunks: string[], retries = 3): Promise<number[][]> {

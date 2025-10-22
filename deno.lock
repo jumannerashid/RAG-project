@@ -1,10 +1,18 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@std/dotenv@*": "0.225.5",
+    "jsr:@std/dotenv@~0.225.5": "0.225.5",
     "npm:@google/generative-ai@*": "0.21.0",
     "npm:@google/generative-ai@0.10.0": "0.10.0",
     "npm:@google/generative-ai@0.21.0": "0.21.0",
+    "npm:@pinecone-database/pinecone@^6.1.2": "6.1.2",
     "npm:openai@*": "5.23.0"
+  },
+  "jsr": {
+    "@std/dotenv@0.225.5": {
+      "integrity": "9ce6f9d0ec3311f74a32535aa1b8c62ed88b1ab91b7f0815797d77a6f60c922f"
+    }
   },
   "npm": {
     "@google/generative-ai@0.10.0": {
@@ -12,6 +20,9 @@
     },
     "@google/generative-ai@0.21.0": {
       "integrity": "sha512-7XhUbtnlkSEZK15kN3t+tzIMxsbKm/dSkKBFalj+20NvPKe1kBY7mR2P7vuijEn+f06z5+A8bVGKO0v39cr6Wg=="
+    },
+    "@pinecone-database/pinecone@6.1.2": {
+      "integrity": "sha512-ydIlbtgIIHFgBL08sPzua5ckmOgtjgDz8xg21CnP1fqnnEgDmOlnfd10MRKU+fvFRhDlh4Md37SwZDr0d4cBqg=="
     },
     "openai@5.23.0": {
       "integrity": "sha512-Cfq155NHzI7VWR67LUNJMIgPZy2oSh7Fld/OKhxq648BiUjELAvcge7g30xJ6vAfwwXf6TVK0KKuN+3nmIJG/A==",
@@ -1383,6 +1394,9 @@
     "https://esm.sh/zod@4.1.11?target=denonext": "0c47601f8eddb87fb652f87838663c600102181cea30d72774e44d05092c3818"
   },
   "workspace": {
+    "dependencies": [
+      "jsr:@std/dotenv@~0.225.5"
+    ],
     "packageJson": {
       "dependencies": [
         "npm:@pinecone-database/pinecone@^6.1.2"

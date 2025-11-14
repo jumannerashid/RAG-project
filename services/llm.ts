@@ -2,7 +2,7 @@
 import { load } from "https://deno.land/std@0.170.0/dotenv/mod.ts";
 
 const env = await load();
-const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY");
+const GROQ_API_KEY = env.GROQ_API_KEY;
 
 if (!GROQ_API_KEY) throw new Error("GROQ_API_KEY is not set in environment variables");
 
@@ -24,7 +24,7 @@ export async function chatWithHF(prompt: string, retries = 3): Promise<string> {
           model: "llama-3.3-70b-versatile",
           messages: [{ role: "user", content: prompt }],
           max_tokens: 500,
-          temperature: 0.7,
+          temperature: 0.1,
         }),
       });
 
@@ -41,9 +41,9 @@ export async function chatWithHF(prompt: string, retries = 3): Promise<string> {
 
       console.log("✅ Successfully received chat response");
       return generatedText.trim();
-    } catch (error) {
-      console.error(`Chat request failed (attempt ${attempt}):`, error);
-      if (attempt === retries) throw new Error(`Chat request failed: ${error.message}`);
+    } catch (err: unknown) {
+      console.error(`Chat request failed (attempt ${attempt}):`, err);
+      if (attempt === retries) throw new Error(`Chat request failed: ${err instanceof Error ? err.message : String(err)}`);
       await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
     }
   }

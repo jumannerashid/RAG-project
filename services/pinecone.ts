@@ -1,6 +1,7 @@
+// services/pinecone.ts
 import { load } from "https://deno.land/std@0.170.0/dotenv/mod.ts";
 
-const env = await load();
+const _env = await load();
 const PINECONE_API_KEY = Deno.env.get("PINECONE_API_KEY");
 const PINECONE_HOST = Deno.env.get("PINECONE_HOST") || "us-west1-gcp";
 const PINECONE_INDEX = Deno.env.get("PINECONE_INDEX") || "jumanne";
@@ -13,19 +14,14 @@ if (!PINECONE_API_KEY || !PINECONE_HOST || !PINECONE_INDEX) {
   throw new Error("Missing required Pinecone environment variables. Please check .env file.");
 }
 
-//const PINECONE_HOST = `${PINECONE_HOST}.pinecone.io`;
-
 interface Vector {
   id: string;
   vector: number[];
-  metadata: { text: string };
+  metadata: { text: string; sourceFile: string };
 }
 
 export async function upsertToPinecone(
-  ids: string[],
-  vector: Vector,
-  namespace: string,
-  upsertMetadata = false,
+{ id, vector, namespace, upsertMetadata = false }: { id: string; vector: Vector; namespace: string; upsertMetadata?: boolean; },
 ): Promise<void> {
   try {
     console.log("Upserting to Pinecone URL:", PINECONE_HOST);
@@ -43,7 +39,7 @@ export async function upsertToPinecone(
     const response = await fetch(`${PINECONE_HOST}/vectors/upsert`, {
       method: "POST",
       headers: {
-        "Api-Key": PINECONE_API_KEY,
+        "Api-Key": PINECONE_API_KEY!,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
@@ -65,7 +61,7 @@ export async function queryPinecone(query: {
   vector: number[];
   topK: number;
   namespace: string;
-}): Promise<{ id: string; score: number; metadata: { text: string } }[]> {
+}): Promise<{ id: string; score: number; metadata: { text: string; sourceFile: string } }[]> {
   try {
     console.log("Querying Pinecone URL:", PINECONE_HOST);
     const body = {
@@ -78,7 +74,7 @@ export async function queryPinecone(query: {
     const response = await fetch(`${PINECONE_HOST}/query`, {
       method: "POST",
       headers: {
-        "Api-Key": PINECONE_API_KEY,
+        "Api-Key": PINECONE_API_KEY!,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
@@ -93,7 +89,7 @@ export async function queryPinecone(query: {
     const matches = result.matches || [];
     console.log(`✅ Queried Pinecone, found ${matches.length} matches`);
 
-    return matches.map((match: { id: string; score: number; metadata: { text: string } }) => ({
+    return matches.map((match: { id: string; score: number; metadata: { text: string; sourceFile: string } }) => ({
       id: match.id,
       score: match.score,
       metadata: match.metadata,

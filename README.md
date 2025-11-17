@@ -42,42 +42,8 @@ The backend reads documents (`.txt` and `.md`), indexes them, and exposes a **RE
 ---
 
 ## Architecture
+<img width="496" height="1156" alt="image" src="https://github.com/user-attachments/assets/be492242-ff8f-42f1-beff-7a942e290b4a" />
 
-┌─────────────┐
-│ User Query │
-└─────┬───────┘
-│ POST /chat { "query": "..." }
-▼
-┌─────────────┐
-│ RAG Server │
-│ (Deno) │
-└─────┬───────┘
-│
-▼
-┌─────────────┐
-│ Document │
-│ Ingestion │
-│ (.txt/.md) │
-└─────┬───────┘
-│
-▼
-┌─────────────┐
-│ Retrieval │
-│ (Vector DB) │
-└─────┬───────┘
-│
-▼
-┌─────────────┐
-│ LLM │
-│ (Generative │
-│ Model) │
-└─────┬───────┘
-│
-▼
-┌─────────────┐
-│ JSON Output │
-│ { "answer": "..."} │
-└─────────────┘
 
 **Flow:**  
 1. User sends a `query` to `/chat`.  

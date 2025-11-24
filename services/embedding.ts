@@ -1,5 +1,5 @@
 // services/embedding.ts
-import "https://deno.land/x/dotenv/load.ts";
+//import "https://deno.land/x/dotenv/load.ts";
 
 const HF_API_KEY = Deno.env.get("HF_API_KEY");
 if (!HF_API_KEY) throw new Error("HF_API_KEY is not set in .env file");

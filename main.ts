@@ -1,4 +1,4 @@
-import "https://deno.land/x/dotenv/load.ts";
+//import "https://deno.land/x/dotenv/load.ts";
 import { Hono } from "https://deno.land/x/hono@v3.1.5/mod.ts";
 import { z } from "https://deno.land/x/zod/mod.ts";
 

@@ -1,5 +1,5 @@
 // services/pinecone.ts
-import { load } from "https://deno.land/std@0.170.0/dotenv/mod.ts";
+//import { load } from "https://deno.land/std@0.170.0/dotenv/mod.ts";
 
 const _env = await load();
 const PINECONE_API_KEY = Deno.env.get("PINECONE_API_KEY");

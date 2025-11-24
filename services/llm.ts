@@ -1,5 +1,5 @@
 // services/llm.ts
-import "https://deno.land/x/dotenv/load.ts";
+//import "https://deno.land/x/dotenv/load.ts";
 const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY");
 
 if (!GROQ_API_KEY) {

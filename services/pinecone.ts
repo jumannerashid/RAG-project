@@ -1,7 +1,7 @@
 // services/pinecone.ts
 //import { load } from "https://deno.land/std@0.170.0/dotenv/mod.ts";
 
-const _env = await load();
+//const _env = await load();
 const PINECONE_API_KEY = Deno.env.get("PINECONE_API_KEY");
 const PINECONE_HOST = Deno.env.get("PINECONE_HOST") || "us-west1-gcp";
 const PINECONE_INDEX = Deno.env.get("PINECONE_INDEX") || "jumanne";

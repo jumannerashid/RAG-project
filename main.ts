@@ -1,5 +1,5 @@
 // main.ts
-import "https://deno.land/x/dotenv/load.ts";
+//import "https://deno.land/x/dotenv/load.ts";
 import { Hono } from "https://deno.land/x/hono@v3.1.5/mod.ts";
 import { z } from "https://deno.land/x/zod/mod.ts";
 
@@ -34,18 +34,13 @@ app.use("*", async (c, next) => {
   await next();
 });
 
-// Clean text function unchanged
-function cleanText(text: string, isMarkdown: boolean): string { /* ... */ return text; }
 
-// estimateTokens and chunkText unchanged
-function estimateTokens(text: string): number { return Math.ceil(text.length / 3); }
-function chunkText(text: string, maxLength: number = 500): string[] { return [text]; }
+
+
 
 // normalizeVector unchanged
 function normalizeVector(vector: number[]): number[] { /* ... */ return vector; }
 
-// Corpus loader unchanged (used for initial Pinecone upserts)
-async function _loadCorpus() { /* ... */ }
 
 // ⭐ CHANGED / ADDED: Chat endpoint now supports multi-language input
 app.post("/chat", async (c) => {

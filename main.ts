@@ -3,7 +3,7 @@
 import { Hono } from "https://deno.land/x/hono@v3.1.5/mod.ts";
 import { z } from "https://deno.land/x/zod/mod.ts";
 
-import { embedChunks } from "./services/embedding.ts";
+//import { embedChunks } from "./services/embedding.ts";
 import { queryPinecone } from "./services/pinecone.ts";
 
 // ⭐ ADDED: import the translation and English-answer helpers

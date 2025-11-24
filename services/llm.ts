@@ -1,10 +1,10 @@
 // services/llm.ts
-import { load } from "https://deno.land/std@0.170.0/dotenv/mod.ts";
+import "https://deno.land/x/dotenv/load.ts";
+const GROQ_API_KEY = Deno.env.get("GROQ_API_KEY");
 
-const env = await load();
-const GROQ_API_KEY = env.GROQ_API_KEY;
-
-if (!GROQ_API_KEY) throw new Error("GROQ_API_KEY is not set in environment variables");
+if (!GROQ_API_KEY) {
+  throw new Error("GROQ_API_KEY is not set in environment variables");
+}
 
 export async function chatWithHF(prompt: string, retries = 3): Promise<string> {
   if (!prompt || typeof prompt !== "string" || prompt.trim() === "") {
@@ -17,7 +17,7 @@ export async function chatWithHF(prompt: string, retries = 3): Promise<string> {
       const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${GROQ_API_KEY}`,
+          Authorization: `Bearer ${GROQ_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -29,22 +29,25 @@ export async function chatWithHF(prompt: string, retries = 3): Promise<string> {
       });
 
       if (!response.ok) {
-        throw new Error(`Groq API error: ${response.statusText}`);
+        const text = await response.text();
+        throw new Error(`Groq API error: ${response.status} ${response.statusText} – ${text}`);
       }
 
       const data = await response.json();
-      const generatedText = data.choices[0]?.message?.content || "";
+      const generatedText = data.choices?.[0]?.message?.content?.trim();
 
       if (!generatedText) {
         throw new Error("No generated text in Groq response");
       }
 
-      console.log("✅ Successfully received chat response");
-      return generatedText.trim();
+      console.log("Successfully received chat response");
+      return generatedText;
     } catch (err: unknown) {
       console.error(`Chat request failed (attempt ${attempt}):`, err);
-      if (attempt === retries) throw new Error(`Chat request failed: ${err instanceof Error ? err.message : String(err)}`);
-      await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+      if (attempt === retries) {
+        throw new Error(`Chat request failed after ${retries} attempts: ${err instanceof Error ? err.message : String(err)}`);
+      }
+      await new Promise((resolve) => setTimeout(resolve, 1000 * attempt));
     }
   }
 

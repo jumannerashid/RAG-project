@@ -6,7 +6,7 @@ import { z } from "https://deno.land/x/zod/mod.ts";
 import { embedChunks } from "./services/embedding.ts";
 import { queryPinecone } from "./services/pinecone.ts";
 
-// ⭐ ADDED: import the translation and English-answer helpers
+//  ADDED: import the translation and English-answer helpers
 import { translateToEnglish, answerInEnglish } from "./services/llm.ts";
 
 const app = new Hono();
@@ -42,7 +42,7 @@ app.use("*", async (c, next) => {
 function normalizeVector(vector: number[]): number[] { /* ... */ return vector; }
 
 
-// ⭐ CHANGED / ADDED: Chat endpoint now supports multi-language input
+//  CHANGED / ADDED: Chat endpoint now supports multi-language input
 app.post("/chat", async (c) => {
   try {
     const body = await c.req.json();
@@ -51,12 +51,12 @@ app.post("/chat", async (c) => {
 
     const { query } = parsed.data;
 
-    // ⭐ ADDED: Translate incoming query to English first
+    //  ADDED: Translate incoming query to English first
     console.log("Translating incoming query to English:", query);
     const questionEnglish = await translateToEnglish(query);
     console.log("Translated query (English):", questionEnglish);
 
-    // ⭐ CHANGED: Embed English translation for consistent retrieval
+    //  CHANGED: Embed English translation for consistent retrieval
     console.log("Embedding English query for retrieval");
     const queryEmbeddings = await embedChunks([questionEnglish]);
     if (!queryEmbeddings || queryEmbeddings.length === 0 || !queryEmbeddings[0] || queryEmbeddings[0].length !== EXPECTED_DIMENSION) {
@@ -66,7 +66,7 @@ app.post("/chat", async (c) => {
     }
     const queryEmbedding = normalizeVector(queryEmbeddings[0]);
 
-    // ⭐ CHANGED: Query Pinecone using English embedding
+    //  CHANGED: Query Pinecone using English embedding
     console.log("Querying Pinecone for English embedding of user question");
     const pineconeResponse = await queryPinecone({
       vector: queryEmbedding,
@@ -81,11 +81,11 @@ app.post("/chat", async (c) => {
 
     console.log("All Pinecone results:", results.map(r => ({ id: r.id, score: r.score, sourceFile: r.metadata.sourceFile })));
 
-    // ⭐ CHANGED: Filter top results; fallback to top 5 if none > 0.6
+    //  CHANGED: Filter top results; fallback to top 5 if none > 0.6
     results = results.sort((a, b) => b.score - a.score);
     let topMatches = results.filter(r => r.score > 0.6);
     if (topMatches.length === 0) {
-      topMatches = results.slice(0, 5); // ⭐ ADDED fallback
+      topMatches = results.slice(0, 5); //  ADDED fallback
       console.log("No high-confidence matches; using top 5 for context");
     } else {
       topMatches = topMatches.slice(0, 5);
@@ -93,12 +93,12 @@ app.post("/chat", async (c) => {
 
     if (topMatches.length === 0) return c.json({ error: "No relevant context found" }, 404);
 
-    // ⭐ CHANGED: Build context string from top matches
+    //  CHANGED: Build context string from top matches
     const context = topMatches
       .map((r, i) => `Source ${i + 1} (score: ${r.score.toFixed(3)}, file: ${r.metadata.sourceFile}):\n${r.metadata.text}`)
       .join("\n\n");
 
-    // ⭐ ADDED: Ask LLM to answer in English using ONLY the context
+    //  ADDED: Ask LLM to answer in English using ONLY the context
     console.log("Requesting grounded English answer from LLM");
     const answer = await answerInEnglish(questionEnglish, context);
 
